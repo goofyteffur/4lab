@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +46,6 @@ fun CalculatorScreen() {
             text = "Дано натуральное число n. Вычислить:",
             fontSize = 16.sp
         )
-
-            //вариант5
         Text(
             text = "1/1! + 1/2! + 1/3! + ... + 1/n!",
             fontSize = 18.sp,
@@ -65,11 +64,43 @@ fun CalculatorScreen() {
 
         Button(
             onClick = {
-                // Логика
+                val n = textN.toIntOrNull()
+                if (n != null && n > 0) {
+                    result = calculateSum(n)
+                } else {
+                    result = "Ошибка: введите натуральное число"
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Вычислить", fontSize = 18.sp)
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        if (result.isNotEmpty()) {
+            Text(
+                text = "Результат:",
+                fontSize = 18.sp
+            )
+            Text(
+                text = result,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
     }
+}
+
+// Функция вычисления
+fun calculateSum(n: Int): String {
+    var factorial = 1.0
+    var sum = 0.0
+
+    for (k in 1..n) {
+        factorial *= k
+        sum += 1.0 / factorial
+    }
+
+    return String.format(Locale.US, "%.6f", sum)
 }
